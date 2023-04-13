@@ -22,7 +22,7 @@ NUM_EPOCHS = 5
 FEATURES_DISC = 64
 FEATURES_GEN = 64
 CRITIC_ITERATIONS = 5
-WEIGHT_CLIP = 0.01
+LAMBDA_GP = 10
 
 transforms = tf.Compose([
     tf.Resize(IMAGE_SIZE),
@@ -48,8 +48,8 @@ critic = Critic(CHANNELS_IMG, FEATURES_DISC).to(device)
 initialize_weights(gen)
 initialize_weights(critic)
 
-opt_gen = optim.RMSprop(gen.parameters(), lr=LEARNING_RATE)
-opt_critic = optim.RMSprop(critic.parameters(), lr=LEARNING_RATE)
+opt_gen = optim.Adam(gen.parameters(), lr=LEARNING_RATE, betas=(0.0, 0.9))
+opt_critic = optim.Adam(critic.parameters(), lr=LEARNING_RATE, betas=(0.0, 0.9))
 
 fixed_noise = torch.randn(32, Z_DIM, 1, 1).to(device)
 
@@ -70,13 +70,11 @@ for epoch in range(NUM_EPOCHS):
             fake = gen(noise)
             critic_real = critic(real).reshape(-1)
             critic_fake = critic(fake).reshape(-1)
-            loss_critic = -(torch.mean(critic_real) - torch.mean(critic_fake))
+            gp = gradient_penalty(critic, real, fake, device=device)
+            loss_critic = -(torch.mean(critic_real) - torch.mean(critic_fake) + LAMBDA_GP * gp)
             critic.zero_grad()
             loss_critic.backward(retain_graph=True)
             opt_critic.step()
-
-            for p in critic.parameters():
-                p.data.clamp_(-WEIGHT_CLIP, WEIGHT_CLIP)
 
         output = critic(fake).reshape(-1)
         loss_gen = -(torch.mean(output))
