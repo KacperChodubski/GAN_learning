@@ -39,7 +39,7 @@ def save_checkpoint(critic, generator, optimizer_critic, optimizer_generator):
         'state_dict': generator.state_dict(),
         'optimizer_state': optimizer_generator.state_dict(),
     }
-    generator_name = f'model_critic.pth'
+    generator_name = f'model_generator.pth'
     torch.save(training_state_generator, os.path.join(model_binaries_path, generator_name))
 
 
