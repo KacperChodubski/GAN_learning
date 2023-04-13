@@ -25,7 +25,7 @@ CRITIC_ITERATIONS = 5
 LAMBDA_GP = 10
 
 transforms = tf.Compose([
-    tf.Resize(IMAGE_SIZE),
+    tf.Resize((IMAGE_SIZE, IMAGE_SIZE)),
     tf.ToTensor(),
     tf.Normalize([0.5 for _ in range(CHANNELS_IMG)], [0.5 for _ in range(CHANNELS_IMG)]),
 ])
