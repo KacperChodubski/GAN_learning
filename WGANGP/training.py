@@ -64,12 +64,14 @@ for epoch in range(NUM_EPOCHS):
 
         for _ in range(CRITIC_ITERATIONS):
         ### critic training
-            noise = torch.randn((real.shape[0], Z_DIM, 1, 1)).to(device)
+            noise = torch.randn(real.shape[0], Z_DIM, 1, 1).to(device)
             fake = gen(noise)
-            critic_real = critic(real).view(-1)
-            critic_fake = critic(fake).view(-1)
+            critic_real = critic(real).reshape(-1)
+            critic_fake = critic(fake).reshape(-1)
             gp = gradient_penalty(critic, real, fake, device=device)
-            loss_critic = (-(torch.mean(critic_real) - torch.mean(critic_fake)) + LAMBDA_GP * gp)
+            loss_critic = (
+                -(torch.mean(critic_real) - torch.mean(critic_fake)) + LAMBDA_GP * gp
+            )
             critic.zero_grad()
             loss_critic.backward(retain_graph=True)
             opt_critic.step()
@@ -80,7 +82,7 @@ for epoch in range(NUM_EPOCHS):
         loss_gen.backward()
         opt_gen.step()
 
-        if batch_idx % 20 == 0:
+        if batch_idx % 100 == 0:
             print(
                 f"Epoch [{epoch}/{NUM_EPOCHS}] Batch: {batch_idx}/{len(train_loader)}  | "
                 f"LossC: {loss_critic:.4f}, LossG: {loss_gen:.4f}")
