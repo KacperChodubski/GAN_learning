@@ -85,7 +85,7 @@ for epoch in range(NUM_EPOCHS):
         if batch_idx % 100 == 0:
             print(
                 f"Epoch [{epoch}/{NUM_EPOCHS}] Batch: {batch_idx}/{len(train_loader)}  | "
-                f"LossD: {loss_critic:.4f}, LossG: {loss_gen:.4f}")
+                f"LossC: {loss_critic:.4f}, LossG: {loss_gen:.4f}")
             with torch.no_grad():
                 fake = gen(fixed_noise)
                 img_grid_fake = torchvision.utils.make_grid(fake[:32], normalize=True)

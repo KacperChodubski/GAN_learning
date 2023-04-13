@@ -50,7 +50,7 @@ class Generator(nn.Module):
         return nn.Sequential(
             nn.ConvTranspose2d(in_channels, out_channels, kernel_size, stride, padding, bias=False),
             nn.BatchNorm2d(out_channels),
-            nn.LeakyReLU()
+            nn.ReLU()
         )
     
     def forward(self, x):
