@@ -82,9 +82,9 @@ for epoch in range(NUM_EPOCHS):
         loss_gen.backward()
         opt_gen.step()
 
-        if batch_idx == 0:
+        if batch_idx % 100 == 0:
             print(
-                f"Epoch [{epoch}/{NUM_EPOCHS}] \ "
+                f"Epoch [{epoch}/{NUM_EPOCHS}] Batch: {batch_idx}/{len(train_loader)}  | "
                 f"LossD: {loss_critic:.4f}, LossG: {loss_gen:.4f}")
             with torch.no_grad():
                 fake = gen(fixed_noise)
