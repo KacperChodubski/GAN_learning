@@ -7,15 +7,16 @@ import torchvision.transforms as tf
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from model import Critic, Generator, initialize_weights
+from utils import gradient_penalty
 import os
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-LEARNING_RATE = 2e-4
-BATCH_SIZE = 32
+LEARNING_RATE = 1e-4
+BATCH_SIZE = 64
 IMAGE_SIZE = 64
-CHANNELS_IMG = 1
+CHANNELS_IMG = 3
 Z_DIM = 100
 NUM_EPOCHS = 5
 FEATURES_DISC = 64
@@ -29,12 +30,14 @@ transforms = tf.Compose([
     tf.Normalize([0.5 for _ in range(CHANNELS_IMG)], [0.5 for _ in range(CHANNELS_IMG)]),
 ])
 
-train_dataset = datasets.MNIST("./dataset", train=True, transform=transforms, download=True)
+#train_dataset = datasets.MNIST("./dataset", train=True, transform=transforms, download=True)
 #test_dataset = datasets.MNIST("./dataset", train=False, transform=transforms, download=False)
 
 
 path = os.path.join(os.path.dirname(__file__), "dataset", "Celeb")
-#train_dataset = datasets.ImageFolder(root=path, transform=transforms)
+train_dataset = datasets.ImageFolder(root=path, transform=transforms)
+
+#train_dataset = datasets.CelebA("./dataset", split="train", transform=transforms, download=True)
 
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 #test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
