@@ -82,7 +82,7 @@ for epoch in range(NUM_EPOCHS):
         loss_gen.backward()
         opt_gen.step()
 
-        if batch_idx % 100 == 0:
+        if batch_idx % 20 == 0:
             print(
                 f"Epoch [{epoch}/{NUM_EPOCHS}] Batch: {batch_idx}/{len(train_loader)}  | "
                 f"LossC: {loss_critic:.4f}, LossG: {loss_gen:.4f}")
