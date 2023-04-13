@@ -66,15 +66,15 @@ for epoch in range(NUM_EPOCHS):
         ### critic training
             noise = torch.randn((real.shape[0], Z_DIM, 1, 1)).to(device)
             fake = gen(noise)
-            critic_real = critic(real).reshape(-1)
-            critic_fake = critic(fake).reshape(-1)
+            critic_real = critic(real).view(-1)
+            critic_fake = critic(fake.detach()).view(-1)
             gp = gradient_penalty(critic, real, fake, device=device)
             loss_critic = -(torch.mean(critic_real) - torch.mean(critic_fake)) + LAMBDA_GP * gp
             critic.zero_grad()
-            loss_critic.backward(retain_graph=True)
+            loss_critic.backward()
             opt_critic.step()
 
-        output = critic(fake).reshape(-1)
+        output = critic(fake).view(-1)
         loss_gen = -(torch.mean(output))
         gen.zero_grad()
         loss_gen.backward()
