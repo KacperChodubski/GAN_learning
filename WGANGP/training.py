@@ -71,7 +71,7 @@ for epoch in range(NUM_EPOCHS):
             critic_real = critic(real).reshape(-1)
             critic_fake = critic(fake).reshape(-1)
             gp = gradient_penalty(critic, real, fake, device=device)
-            loss_critic = -(torch.mean(critic_real) - torch.mean(critic_fake) + LAMBDA_GP * gp)
+            loss_critic = -(torch.mean(critic_real) - torch.mean(critic_fake)) + LAMBDA_GP * gp
             critic.zero_grad()
             loss_critic.backward(retain_graph=True)
             opt_critic.step()
