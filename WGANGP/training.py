@@ -30,14 +30,12 @@ transforms = tf.Compose([
     tf.Normalize([0.5 for _ in range(CHANNELS_IMG)], [0.5 for _ in range(CHANNELS_IMG)]),
 ])
 
-#train_dataset = datasets.MNIST("./dataset", train=True, transform=transforms, download=True)
+train_dataset = datasets.MNIST("./dataset", train=True, transform=transforms, download=True)
 #test_dataset = datasets.MNIST("./dataset", train=False, transform=transforms, download=False)
 
 
-path = os.path.join(os.path.dirname(__file__), "dataset", "Celeb")
-train_dataset = datasets.ImageFolder(root=path, transform=transforms)
-
-#train_dataset = datasets.CelebA("./dataset", split="train", transform=transforms, download=True)
+#path = os.path.join(os.path.dirname(__file__), "dataset", "Celeb")
+#train_dataset = datasets.ImageFolder(root=path, transform=transforms)
 
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 #test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
