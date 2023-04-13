@@ -66,7 +66,7 @@ for epoch in range(NUM_EPOCHS):
 
         for _ in range(CRITIC_ITERATIONS):
         ### critic training
-            noise = torch.randn((BATCH_SIZE, Z_DIM, 1, 1)).to(device)
+            noise = torch.randn((real.shape[0], Z_DIM, 1, 1)).to(device)
             fake = gen(noise)
             critic_real = critic(real).reshape(-1)
             critic_fake = critic(fake).reshape(-1)
