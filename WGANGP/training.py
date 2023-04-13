@@ -7,7 +7,7 @@ import torchvision.transforms as tf
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from model import Critic, Generator, initialize_weights
-from utils import gradient_penalty
+from utils import gradient_penalty, save_checkpoint, load_checkpoint
 import os
 
 
@@ -83,6 +83,7 @@ for epoch in range(NUM_EPOCHS):
         opt_gen.step()
 
         if batch_idx % 100 == 0:
+            save_checkpoint(critic, gen, opt_critic, opt_gen)
             print(
                 f"Epoch [{epoch}/{NUM_EPOCHS}] Batch: {batch_idx}/{len(train_loader)}  | "
                 f"LossC: {loss_critic:.4f}, LossG: {loss_gen:.4f}")
